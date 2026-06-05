@@ -2,39 +2,56 @@
 
 ## Overview
 
-Parallel Image Processing System adalah aplikasi berbasis web yang dirancang untuk membandingkan performa pemrosesan citra menggunakan dua pendekatan:
+Parallel Image Processing System adalah aplikasi berbasis web yang dikembangkan untuk mengimplementasikan dan menganalisis konsep Komputasi Paralel pada pemrosesan citra digital.
+
+Aplikasi ini membandingkan dua metode pemrosesan gambar:
 
 * Sequential Processing (pemrosesan berurutan)
 * Parallel Processing (pemrosesan paralel)
 
-Aplikasi ini dibangun sebagai implementasi konsep Komputasi Paralel dengan memanfaatkan Python Multiprocessing pada backend dan React sebagai frontend.
+Sistem dibangun menggunakan React sebagai frontend, Flask sebagai backend, serta Python Multiprocessing untuk implementasi komputasi paralel.
 
 ---
 
 ## Background
 
-Pemrosesan citra digital sering digunakan dalam berbagai bidang seperti:
+Pemrosesan citra digital merupakan salah satu bidang yang banyak digunakan dalam berbagai sektor, seperti:
 
 * Computer Vision
+* Artificial Intelligence
 * Medical Imaging
 * Smart Transportation
-* Artificial Intelligence
 * Industrial Automation
 
-Pada data berukuran besar, proses pengolahan citra dapat memerlukan waktu yang cukup lama.
-
-Oleh karena itu diperlukan pendekatan komputasi paralel untuk membagi pekerjaan ke beberapa worker sehingga proses dapat berjalan secara bersamaan.
+Pada data berukuran besar, proses pengolahan citra dapat memerlukan waktu eksekusi yang cukup tinggi. Oleh karena itu, diperlukan pendekatan komputasi paralel untuk membagi beban kerja ke beberapa worker sehingga proses dapat dijalankan secara bersamaan dan lebih efisien.
 
 ---
 
 ## Objectives
 
-Tujuan dari project ini adalah:
+Tujuan utama project ini adalah:
 
-* Mengimplementasikan konsep komputasi paralel pada pemrosesan citra.
-* Membandingkan performa antara metode sequential dan parallel.
+* Mengimplementasikan konsep komputasi paralel menggunakan Python Multiprocessing.
+* Membandingkan performa antara Sequential Processing dan Parallel Processing.
 * Mengukur execution time, speedup, dan efficiency.
-* Menampilkan hasil pengolahan citra secara visual.
+* Menampilkan hasil pengolahan citra secara visual melalui antarmuka web.
+* Memberikan analisis performa berdasarkan hasil pengujian.
+
+---
+
+## Dashboard Preview
+
+Berikut merupakan tampilan utama aplikasi Parallel Image Processing System.
+
+Fitur utama yang tersedia pada dashboard:
+
+* Upload gambar
+* Pemilihan efek pemrosesan
+* Pengaturan jumlah worker
+* Analisis performa
+* Perbandingan hasil sequential dan parallel
+
+![Dashboard Preview](docs/Dashboard.png)
 
 ---
 
@@ -42,11 +59,11 @@ Tujuan dari project ini adalah:
 
 ### Image Upload
 
-Pengguna dapat mengunggah file gambar yang akan diproses.
+Pengguna dapat mengunggah file gambar yang akan diproses oleh sistem.
 
 ### Image Processing Effects
 
-Sistem menyediakan beberapa efek:
+Sistem menyediakan beberapa metode pemrosesan citra:
 
 * Grayscale
 * Blur
@@ -54,15 +71,15 @@ Sistem menyediakan beberapa efek:
 
 ### Sequential Processing
 
-Gambar diproses menggunakan satu proses secara berurutan.
+Gambar diproses menggunakan satu proses secara berurutan tanpa pembagian tugas.
 
 ### Parallel Processing
 
-Gambar dibagi menjadi beberapa bagian dan diproses menggunakan beberapa worker secara bersamaan.
+Gambar dibagi menjadi beberapa bagian (chunk) dan diproses secara bersamaan menggunakan beberapa worker.
 
 ### Performance Analysis
 
-Sistem menampilkan:
+Sistem secara otomatis menampilkan:
 
 * Sequential Time
 * Parallel Time
@@ -83,7 +100,7 @@ Sistem menampilkan:
 ### Backend
 
 * Flask
-* Flask CORS
+* Flask-CORS
 
 ### Processing
 
@@ -91,16 +108,12 @@ Sistem menampilkan:
 * ProcessPoolExecutor
 * Pillow (PIL)
 
+### Version Control
+
+* Git
+* GitHub
+
 ---
-## Dashboard 
-
-(docs/Dashboard.png)
-
-
-
-
-
-
 
 ## System Architecture
 
@@ -108,21 +121,41 @@ Sistem menampilkan:
 
 ### Architecture Explanation
 
-Frontend React bertugas menerima input dari pengguna dan menampilkan hasil.
+#### Frontend Layer
 
-Backend Flask menerima request dari frontend lalu meneruskan proses ke Service Layer.
+Frontend dibangun menggunakan React dan berfungsi untuk:
 
-Service Layer bertugas mengatur alur bisnis aplikasi dan melakukan pengukuran performa.
+* Upload gambar
+* Memilih efek pemrosesan
+* Mengatur jumlah worker
+* Menampilkan hasil pemrosesan
 
-Processing Layer terdiri dari:
+#### Controller Layer
+
+Backend Flask menerima request dari frontend dan mengatur komunikasi antar layer.
+
+#### Service Layer
+
+Layer ini bertanggung jawab untuk:
+
+* Validasi data
+* Pengaturan alur proses
+* Pengukuran performa
+* Perhitungan speedup dan efficiency
+
+#### Processing Layer
+
+Terdiri dari dua metode pemrosesan:
 
 * Sequential Processor
 * Parallel Processor
 
-Storage Layer digunakan untuk menyimpan:
+#### Storage Layer
 
-* Uploaded Images
-* Processed Images
+Digunakan untuk menyimpan:
+
+* File upload
+* Hasil pemrosesan
 
 ---
 
@@ -138,8 +171,9 @@ Storage Layer digunakan untuk menyimpan:
 4. Frontend mengirim request ke Flask API.
 5. Backend menjalankan Sequential Processing.
 6. Backend menjalankan Parallel Processing.
-7. Sistem membandingkan waktu eksekusi.
-8. Hasil ditampilkan ke pengguna.
+7. Sistem menghitung execution time.
+8. Sistem menghitung speedup dan efficiency.
+9. Hasil ditampilkan kepada pengguna.
 
 ---
 
@@ -170,18 +204,21 @@ parallel-image-processing/
 │   └── package.json
 │
 ├── docs/
+│   ├── Dashboard.png
 │   ├── architecture.png
 │   └── flowchart.png
 │
 └── README.md
 ```
 
+---
+
 ## Parallel Computing Implementation
 
 Implementasi komputasi paralel berada pada:
 
 ```python
-parallel_processor.py
+backend/processors/parallel_processor.py
 ```
 
 Menggunakan:
@@ -190,12 +227,13 @@ Menggunakan:
 ProcessPoolExecutor
 ```
 
-Tahapan:
+Mekanisme kerja:
 
 1. Gambar dibagi menjadi beberapa chunk.
 2. Setiap chunk diproses oleh worker yang berbeda.
-3. Hasil dari seluruh worker digabung kembali.
-4. Waktu eksekusi dibandingkan dengan metode sequential.
+3. Worker berjalan secara bersamaan menggunakan multiprocessing.
+4. Hasil seluruh worker digabung kembali.
+5. Waktu eksekusi dibandingkan dengan metode sequential.
 
 ---
 
@@ -203,27 +241,31 @@ Tahapan:
 
 ### Execution Time
 
-Waktu yang diperlukan untuk menyelesaikan proses.
+Waktu yang diperlukan untuk menyelesaikan proses pemrosesan gambar.
 
 ### Speedup
 
 Rumus:
 
+```text
 Speedup = Sequential Time / Parallel Time
+```
 
 Interpretasi:
 
 * Speedup > 1 → Parallel lebih cepat
-* Speedup = 1 → Sama
+* Speedup = 1 → Performa sama
 * Speedup < 1 → Parallel lebih lambat
 
 ### Efficiency
 
 Rumus:
 
+```text
 Efficiency = Speedup / Number of Workers
+```
 
-Digunakan untuk mengukur efektivitas penggunaan worker.
+Digunakan untuk mengukur efektivitas penggunaan worker pada sistem paralel.
 
 ---
 
@@ -235,6 +277,12 @@ Digunakan untuk mengukur efektivitas penggunaan worker.
 cd backend
 pip install -r requirements.txt
 python app.py
+```
+
+Backend akan berjalan pada:
+
+```text
+http://localhost:5000
 ```
 
 ### Frontend
@@ -251,28 +299,49 @@ Frontend akan berjalan pada:
 http://localhost:5173
 ```
 
-Backend akan berjalan pada:
+---
 
-```text
-http://localhost:5000
-```
+## Testing Scenario
+
+Pengujian dilakukan dengan beberapa parameter:
+
+* Gambar resolusi kecil
+* Gambar resolusi besar
+* Efek Grayscale
+* Efek Blur
+* Efek Edge Detection
+* Worker 2, 4, 6, dan 8
+
+Output yang diamati:
+
+* Execution Time
+* Speedup
+* Efficiency
+* Visual Result Comparison
 
 ---
 
 ## Future Improvements
 
-* Support larger image datasets
-* More advanced image filters
-* Real-time performance monitoring
+Pengembangan yang dapat dilakukan di masa depan:
+
+* Support high-resolution image datasets
+* Additional image processing filters
+* Real-time monitoring dashboard
 * GPU-based parallel processing
-* Distributed computing support
+* Distributed Computing Implementation
+* Cloud Deployment
 
 ---
 
 ## Author
 
-Parallel Image Processing System
+**Moch Riezky Dwi Kuswanto**
 
-Developed for IFB206 - Komputasi Paralel
+IFB206 – Komputasi Paralel
 
-Institut Teknologi Nasional Bandung
+Program Studi Informatika
+
+Institut Teknologi Nasional Bandung (ITENAS)
+
+2026
