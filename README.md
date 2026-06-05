@@ -92,6 +92,15 @@ Sistem menampilkan:
 * Pillow (PIL)
 
 ---
+## Dashboard 
+
+(docs/Dashboard.png)
+
+
+
+
+
+
 
 ## System Architecture
 
